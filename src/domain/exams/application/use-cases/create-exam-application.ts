@@ -3,9 +3,11 @@ import { Either, left, right } from '../../../../core/either';
 import { ExamApplication } from '../../enterprise/entities/exam-application';
 import { ExamApplicationsRepository } from '../repositories/exam-applications-repository';
 import { ExamTemplatesRepository } from '../repositories/exam-templates-repository';
+import { UniqueEntityID } from 'src/core/entities/unique-entity-id';
 
 interface CreateExamApplicationUseCaseRequest {
   examTemplateId: string;
+  questionsIds: string[];
   startDate: null | Date;
   endDate: null | Date;
 }
@@ -26,6 +28,7 @@ export class CreateExamApplicationUseCase {
 
   async execute({
     examTemplateId,
+    questionsIds,
     startDate,
     endDate,
   }: CreateExamApplicationUseCaseRequest): Promise<CreateExamApplicationUseCaseResponse> {
@@ -38,6 +41,9 @@ export class CreateExamApplicationUseCase {
 
     const examApplication = ExamApplication.create({
       examTemplateId: examTemplate.id,
+      questionsIds: questionsIds.map(
+        (questionId) => new UniqueEntityID(questionId),
+      ),
       startDate,
       endDate,
     });

@@ -3,11 +3,11 @@ import { Either, right } from 'src/core/either';
 import { WrittenQuestionsRepository } from '../repositories/written-questions-repository';
 import { WrittenQuestion } from '../../enterprise/entities/written-question';
 
-interface CreateExamQuestionUseCaseRequest {
+interface CreateWrittenQuestionUseCaseRequest {
   enunciation: string;
 }
 
-type CreateExamQuestionUseCaseResponse = Either<
+type CreateWrittenQuestionUseCaseResponse = Either<
   null,
   {
     writtenQuestion: WrittenQuestion;
@@ -15,12 +15,12 @@ type CreateExamQuestionUseCaseResponse = Either<
 >;
 
 @Injectable()
-export class CreateExamQuestionUseCase {
+export class CreateWrittenQuestionUseCase {
   constructor(private writtenQuestionsRepository: WrittenQuestionsRepository) {}
 
   async execute({
     enunciation,
-  }: CreateExamQuestionUseCaseRequest): Promise<CreateExamQuestionUseCaseResponse> {
+  }: CreateWrittenQuestionUseCaseRequest): Promise<CreateWrittenQuestionUseCaseResponse> {
     const writtenQuestion = WrittenQuestion.create({
       enunciation,
     });

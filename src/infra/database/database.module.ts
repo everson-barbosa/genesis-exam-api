@@ -2,8 +2,10 @@ import { Module } from '@nestjs/common';
 import { PrismaService } from './prisma/prisma.service';
 import { ExamTemplatesRepository } from 'src/domain/exams/application/repositories/exam-templates-repository';
 import { PrismaExamTemplatesRepository } from './prisma/repositories/prisma-exam-templates-repository';
-import { ExamApplication } from 'src/domain/exams/enterprise/entities/exam-application';
 import { PrismaExamApplicationsRepository } from './prisma/repositories/prisma-exam-applications-repository';
+import { ExamApplicationsRepository } from 'src/domain/exams/application/repositories/exam-applications-repository';
+import { WrittenQuestionsRepository } from 'src/domain/exams/application/repositories/written-questions-repository';
+import { PrismaWrittenQuestionsRepository } from './prisma/repositories/prisma-written-questions-repository';
 
 @Module({
   providers: [
@@ -13,10 +15,18 @@ import { PrismaExamApplicationsRepository } from './prisma/repositories/prisma-e
       useClass: PrismaExamTemplatesRepository,
     },
     {
-      provide: ExamApplication,
+      provide: ExamApplicationsRepository,
       useClass: PrismaExamApplicationsRepository,
     },
+    {
+      provide: WrittenQuestionsRepository,
+      useClass: PrismaWrittenQuestionsRepository,
+    },
   ],
-  exports: [ExamTemplatesRepository, ExamApplication],
+  exports: [
+    ExamTemplatesRepository,
+    ExamApplicationsRepository,
+    WrittenQuestionsRepository,
+  ],
 })
 export class DatabaseModule {}

@@ -4,6 +4,7 @@ import { Optional } from '../../../../core/types/Optional';
 
 interface ExamApplicationProps {
   examTemplateId: UniqueEntityID;
+  questionsIds: UniqueEntityID[];
   startDate: Date | null;
   endDate: Date | null;
 }

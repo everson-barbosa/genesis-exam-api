@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ExamTemplatesRepository } from 'src/domain/exams/application/repositories/exam-templates-repository';
 import { ExamTemplate } from 'src/domain/exams/enterprise/entities/exam-template';
 import { PrismaService } from '../prisma.service';
-import { PrismaExamTemplateMapper } from '../mappers/prisma-exam-templates-mapper';
+import { PrismaExamTemplateMapper } from '../mappers/prisma-exam-template-mapper';
 
 @Injectable()
 export class PrismaExamTemplatesRepository implements ExamTemplatesRepository {

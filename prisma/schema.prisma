@@ -21,18 +21,37 @@ model User {
 }
 
 model Question {
-  id             String  @id
-  enunciation    String
-  examTemplateId String? @map("exam_template_id")
+  id          String @id
+  enunciation String
 
-  examTemplate ExamTemplate? @relation(fields: [examTemplateId], references: [id])
+  examTemplateQuestion    ExamTemplateQuestion[]
+  examApplicationQuestion ExamApplicationQuestion[]
+}
+
+model ExamTemplateQuestion {
+  id             String @id
+  questionId     String @map("question_id")
+  examTemplateId String @map("exam_template_id")
+
+  question     Question     @relation(fields: [questionId], references: [id])
+  examTemplate ExamTemplate @relation(fields: [examTemplateId], references: [id])
+}
+
+model ExamApplicationQuestion {
+  id                String @id
+  questionId        String @map("question_id")
+  examApplicationId String @map("exam_application_id")
+
+  question        Question        @relation(fields: [questionId], references: [id])
+  examApplication ExamApplication @relation(fields: [examApplicationId], references: [id])
 }
 
 model ExamApplication {
   id             String @id
   examTemplateId String @map("exam_template_id")
 
-  examTemplate ExamTemplate @relation(fields: [examTemplateId], references: [id])
+  examTemplate            ExamTemplate              @relation(fields: [examTemplateId], references: [id])
+  ExamApplicationQuestion ExamApplicationQuestion[]
 }
 
 model ExamTemplate {
@@ -42,9 +61,9 @@ model ExamTemplate {
   createdAt   DateTime @default(now()) @map("created_at")
   userId      String?  @map("user_id")
 
-  questions        Question[]
-  examApplications ExamApplication[]
-  user             User?             @relation(fields: [userId], references: [id])
+  user                  User?                  @relation(fields: [userId], references: [id])
+  examApplications      ExamApplication[]
+  examTemplateQuestions ExamTemplateQuestion[]
 
   @@map("exam_template")
 }

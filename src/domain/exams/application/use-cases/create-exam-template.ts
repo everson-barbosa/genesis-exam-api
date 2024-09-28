@@ -6,16 +6,11 @@ import { ExamTemplateQuestion } from '../../enterprise/entities/exam-template-qu
 import { ExamTemplateQuestionList } from '../../enterprise/entities/exam-template-question-list';
 import { ExamTemplatesRepository } from '../repositories/exam-templates-repository';
 
-interface Question {
-  id: string;
-  weightFactor: number;
-}
-
 interface CreateExamTemplateUseCaseRequest {
   title: string;
   description: string;
   authorId: string;
-  questions: Question[];
+  questionsIds: string[];
 }
 
 type CreateExamTemplateUseCaseResponse = Either<
@@ -33,7 +28,7 @@ export class CreateExamTemplateUseCase {
     title,
     description,
     authorId,
-    questions,
+    questionsIds,
   }: CreateExamTemplateUseCaseRequest): Promise<CreateExamTemplateUseCaseResponse> {
     const examTemplate = ExamTemplate.create({
       title,
@@ -41,10 +36,10 @@ export class CreateExamTemplateUseCase {
       authorId: new UniqueEntityID(authorId),
     });
 
-    const examTemplateQuestions = questions.map((question) => {
+    const examTemplateQuestions = questionsIds.map((questionId) => {
       return ExamTemplateQuestion.create({
         examTemplateId: examTemplate.id,
-        questionId: new UniqueEntityID(question.id),
+        questionId: new UniqueEntityID(questionId),
       });
     });
 
