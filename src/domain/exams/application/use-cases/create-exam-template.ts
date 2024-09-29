@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { Either, right } from '../../../../core/either';
 import { UniqueEntityID } from '../../../../core/entities/unique-entity-id';
-import { ExamTemplate } from '../../enterprise/entities/exam-template';
-import { ExamTemplateQuestion } from '../../enterprise/entities/exam-template-question';
-import { ExamTemplateQuestionList } from '../../enterprise/entities/exam-template-question-list';
+import { ExamTemplate } from '../../enterprise/entities/exam-template/exam-template';
+import { ExamTemplateQuestion } from '../../enterprise/entities/exam-template/exam-template-question';
+import { ExamTemplateQuestionList } from '../../enterprise/entities/exam-template/exam-template-question-list';
 import { ExamTemplatesRepository } from '../repositories/exam-templates-repository';
 
 interface CreateExamTemplateUseCaseRequest {

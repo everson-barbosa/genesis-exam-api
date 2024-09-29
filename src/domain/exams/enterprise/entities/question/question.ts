@@ -19,6 +19,10 @@ interface QuestionProps {
 type CreateQuestionProps = Optional<QuestionProps, 'options'>;
 
 export class Question extends Entity<QuestionProps> {
+  get enunciation() {
+    return this.enunciation;
+  }
+
   set options(options: QuestionOptionList) {
     this.options = options;
   }

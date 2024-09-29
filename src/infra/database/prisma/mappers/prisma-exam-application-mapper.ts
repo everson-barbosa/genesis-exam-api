@@ -1,5 +1,5 @@
 import { ExamApplication as PrismaExamApplication } from '@prisma/client';
-import { ExamApplication } from 'src/domain/exams/enterprise/entities/exam-application';
+import { ExamApplication } from 'src/domain/exams/enterprise/entities/exam-application/exam-application';
 
 export class PrismaExamApplicationMapper {
   static toPrisma(raw: ExamApplication): PrismaExamApplication {

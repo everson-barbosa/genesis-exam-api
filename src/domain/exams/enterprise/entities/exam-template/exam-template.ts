@@ -1,6 +1,6 @@
-import { AggregateRoot } from '../../../../core/entities/aggregate-root';
-import { Optional } from '../../../../core/types/Optional';
-import { UniqueEntityID } from '../../../../core/entities/unique-entity-id';
+import { AggregateRoot } from '../../../../../core/entities/aggregate-root';
+import { Optional } from '../../../../../core/types/Optional';
+import { UniqueEntityID } from '../../../../../core/entities/unique-entity-id';
 import { ExamTemplateQuestionList } from './exam-template-question-list';
 
 interface ExamTemplateProps {

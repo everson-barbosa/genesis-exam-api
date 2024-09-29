@@ -1,10 +1,11 @@
 import { Either, left, right } from 'src/core/either';
 import { QuestionsRepository } from '../repositories/questions-repository';
-import { Question } from '../../enterprise/entities/question';
-import { QuestionOptionList } from '../../enterprise/entities/question-option-list';
-import { QuestionOption } from '../../enterprise/entities/question-option';
+import { Question } from '../../enterprise/entities/question/question';
+import { QuestionOptionList } from '../../enterprise/entities/question/question-option-list';
+import { QuestionOption } from '../../enterprise/entities/question/question-option';
 import { UniqueEntityID } from 'src/core/entities/unique-entity-id';
 import { NotEnoughOptionsError } from './errors/not-enough-options-error';
+import { Injectable } from '@nestjs/common';
 
 interface CreateMultipleChoiceQuestionUseCaseRequest {
   enunciation: string;
@@ -20,6 +21,7 @@ type CreateMultipleChoiceQuestionUseCaseResponse = Either<
 
 const MINIMUM_OPTION_LENGTH = 2;
 
+@Injectable()
 export class CreateMultipleChoiceQuestionUseCase {
   constructor(private questionsRepository: QuestionsRepository) {}
 

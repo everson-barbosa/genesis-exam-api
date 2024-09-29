@@ -1,4 +1,4 @@
-import { WatchedList } from '../../../../core/entities/watched-list';
+import { WatchedList } from '../../../../../core/entities/watched-list';
 import { ExamApplicationQuestion } from './exam-application-question';
 
 export class ExamApplicationQuestionList extends WatchedList<ExamApplicationQuestion> {

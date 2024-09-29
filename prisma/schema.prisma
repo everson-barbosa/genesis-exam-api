@@ -14,14 +14,14 @@ datasource db {
 }
 
 model User {
-  id    String @id
+  id    String @id @default(uuid())
   email String @unique
 
   examTemplates ExamTemplate[]
 }
 
 model QuestionOptions {
-  id         String  @id
+  id         String  @id @default(uuid())
   text       String
   isCorrect  Boolean
   questionId String? @map("question_id")
@@ -30,7 +30,7 @@ model QuestionOptions {
 }
 
 model Question {
-  id          String            @id
+  id          String            @id @default(uuid())
   enunciation String
   options     QuestionOptions[]
 
@@ -39,16 +39,18 @@ model Question {
 }
 
 model ExamTemplateQuestion {
-  id             String @id
+  id             String @id @default(uuid())
   questionId     String @map("question_id")
   examTemplateId String @map("exam_template_id")
+  position       Int
+  scoreWeight    Float
 
   question     Question     @relation(fields: [questionId], references: [id])
   examTemplate ExamTemplate @relation(fields: [examTemplateId], references: [id])
 }
 
 model ExamApplicationQuestion {
-  id                String @id
+  id                String @id @default(uuid())
   questionId        String @map("question_id")
   examApplicationId String @map("exam_application_id")
 
@@ -57,7 +59,7 @@ model ExamApplicationQuestion {
 }
 
 model ExamApplication {
-  id             String @id
+  id             String @id @default(uuid())
   examTemplateId String @map("exam_template_id")
 
   examTemplate            ExamTemplate              @relation(fields: [examTemplateId], references: [id])
@@ -65,7 +67,7 @@ model ExamApplication {
 }
 
 model ExamTemplate {
-  id          String   @id
+  id          String   @id @default(uuid())
   title       String
   description String
   createdAt   DateTime @default(now()) @map("created_at")

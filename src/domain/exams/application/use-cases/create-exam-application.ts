@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { Either, left, right } from '../../../../core/either';
-import { ExamApplication } from '../../enterprise/entities/exam-application';
+import { ExamApplication } from '../../enterprise/entities/exam-application/exam-application';
 import { ExamApplicationsRepository } from '../repositories/exam-applications-repository';
 import { ExamTemplatesRepository } from '../repositories/exam-templates-repository';
 import { UniqueEntityID } from 'src/core/entities/unique-entity-id';
-import { ExamApplicationQuestionList } from '../../enterprise/entities/exam-application-question-list';
-import { ExamApplicationQuestion } from '../../enterprise/entities/exam-application-question';
+import { ExamApplicationQuestionList } from '../../enterprise/entities/exam-application/exam-application-question-list';
+import { ExamApplicationQuestion } from '../../enterprise/entities/exam-application/exam-application-question';
+import { ExamApplicationParticipant } from '../../enterprise/entities/exam-application/exam-application-participant';
+import { ExamApplicationParticipantList } from '../../enterprise/entities/exam-application/exam-application-participant-list';
 
 interface CreateExamApplicationUseCaseRequest {
   examTemplateId: string;
@@ -13,6 +15,9 @@ interface CreateExamApplicationUseCaseRequest {
     id: string;
     position: number;
     scoreWeight: number;
+  }>;
+  participants: Array<{
+    id: string;
   }>;
   startDate: null | Date;
   endDate: null | Date;
@@ -35,6 +40,7 @@ export class CreateExamApplicationUseCase {
   async execute({
     examTemplateId,
     questions,
+    participants,
     startDate,
     endDate,
   }: CreateExamApplicationUseCaseRequest): Promise<CreateExamApplicationUseCaseResponse> {
@@ -62,6 +68,17 @@ export class CreateExamApplicationUseCase {
 
     examApplication.questions = new ExamApplicationQuestionList(
       examApplicationQuestions,
+    );
+
+    const examApplicationParticipants = participants.map((participant) => {
+      return ExamApplicationParticipant.create({
+        examApplicationId: examApplication.id,
+        examParticipantId: new UniqueEntityID(participant.id),
+      });
+    });
+
+    examApplication.participants = new ExamApplicationParticipantList(
+      examApplicationParticipants,
     );
 
     await this.examApplicationsRepository.create(examApplication);

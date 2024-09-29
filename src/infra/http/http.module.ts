@@ -6,6 +6,8 @@ import { CreateWrittenQuestionUseCase } from 'src/domain/exams/application/use-c
 import { CreateMultipleChoiceQuestionUseCase } from 'src/domain/exams/application/use-cases/create-multiple-choice-question';
 import { CreateWrittenQuestionController } from './controllers/create-written-question.controller';
 import { CreateMultipleChoiceQuestionController } from './controllers/create-multiple-choice-question.controller';
+import { FetchRecentExamTemplatesController } from './controllers/fetch-recent-exam-templates.controller';
+import { FetchRecentExamTemplatesUseCase } from 'src/domain/exams/application/use-cases/fetch-recent-exam-templates';
 
 @Module({
   imports: [DatabaseModule],
@@ -13,11 +15,13 @@ import { CreateMultipleChoiceQuestionController } from './controllers/create-mul
     CreateExamTemplateController,
     CreateWrittenQuestionController,
     CreateMultipleChoiceQuestionController,
+    FetchRecentExamTemplatesController,
   ],
   providers: [
     CreateExamTemplateUseCase,
     CreateWrittenQuestionUseCase,
     CreateMultipleChoiceQuestionUseCase,
+    FetchRecentExamTemplatesUseCase,
   ],
 })
 export class HttpModule {}

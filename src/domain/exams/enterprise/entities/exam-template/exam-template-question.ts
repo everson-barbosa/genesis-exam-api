@@ -1,5 +1,5 @@
-import { Entity } from '../../../../core/entities/entity';
-import { UniqueEntityID } from '../../../../core/entities/unique-entity-id';
+import { Entity } from '../../../../../core/entities/entity';
+import { UniqueEntityID } from '../../../../../core/entities/unique-entity-id';
 
 interface ExamTemplateQuestionProps {
   examTemplateId: UniqueEntityID;
@@ -9,6 +9,22 @@ interface ExamTemplateQuestionProps {
 }
 
 export class ExamTemplateQuestion extends Entity<ExamTemplateQuestionProps> {
+  get examTemplateId() {
+    return this.props.examTemplateId;
+  }
+
+  get questionId() {
+    return this.props.questionId;
+  }
+
+  get position() {
+    return this.props.position;
+  }
+
+  get scoreWeight() {
+    return this.props.scoreWeight;
+  }
+
   static create(props: ExamTemplateQuestionProps, id?: UniqueEntityID) {
     const examTemplateQuestion = new ExamTemplateQuestion(
       { ...props },
