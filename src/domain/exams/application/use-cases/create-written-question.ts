@@ -1,32 +1,31 @@
-import { Injectable } from '@nestjs/common';
 import { Either, right } from 'src/core/either';
-import { WrittenQuestionsRepository } from '../repositories/written-questions-repository';
-import { WrittenQuestion } from '../../enterprise/entities/written-question';
+import { QuestionsRepository } from '../repositories/questions-repository';
+import { Question } from '../../enterprise/entities/question';
 
-interface CreateWrittenQuestionUseCaseRequest {
+interface CreateWrittenQuestionRequest {
   enunciation: string;
 }
 
-type CreateWrittenQuestionUseCaseResponse = Either<
+type CreateWrittenQuestionResponse = Either<
   null,
   {
-    writtenQuestion: WrittenQuestion;
+    question: Question;
   }
 >;
 
-@Injectable()
-export class CreateWrittenQuestionUseCase {
-  constructor(private writtenQuestionsRepository: WrittenQuestionsRepository) {}
+export class CreateWrittenQuestion {
+  constructor(private questionsRepository: QuestionsRepository) {}
 
-  async execute({
-    enunciation,
-  }: CreateWrittenQuestionUseCaseRequest): Promise<CreateWrittenQuestionUseCaseResponse> {
-    const writtenQuestion = WrittenQuestion.create({
-      enunciation,
+  async execute(
+    props: CreateWrittenQuestionRequest,
+  ): Promise<CreateWrittenQuestionResponse> {
+    const question = Question.create({
+      ...props,
+      kind: 'WRITTEN',
     });
 
-    await this.writtenQuestionsRepository.create(writtenQuestion);
+    await this.questionsRepository.create(question);
 
-    return right({ writtenQuestion });
+    return right({ question });
   }
 }

@@ -20,9 +20,19 @@ model User {
   examTemplates ExamTemplate[]
 }
 
+model QuestionOptions {
+  id         String  @id
+  text       String
+  isCorrect  Boolean
+  questionId String? @map("question_id")
+
+  question Question? @relation(fields: [questionId], references: [id])
+}
+
 model Question {
-  id          String @id
+  id          String            @id
   enunciation String
+  options     QuestionOptions[]
 
   examTemplateQuestion    ExamTemplateQuestion[]
   examApplicationQuestion ExamApplicationQuestion[]

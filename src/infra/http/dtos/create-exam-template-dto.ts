@@ -1,4 +1,28 @@
-import { IsArray, IsNotEmpty, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import {
+  IsArray,
+  IsNotEmpty,
+  IsNumber,
+  IsPositive,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
+
+class Question {
+  @IsNotEmpty()
+  @IsString()
+  id: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  @IsPositive()
+  position: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  @IsPositive()
+  scoreWeight: number;
+}
 
 export class CreateExamTemplateDTO {
   @IsNotEmpty()
@@ -10,5 +34,7 @@ export class CreateExamTemplateDTO {
   description: string;
 
   @IsArray()
-  questionsIds: string[];
+  @ValidateNested({ each: true })
+  @Type(() => Question)
+  questions: Question[];
 }

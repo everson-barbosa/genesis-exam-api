@@ -4,8 +4,6 @@ import { ExamTemplatesRepository } from 'src/domain/exams/application/repositori
 import { PrismaExamTemplatesRepository } from './prisma/repositories/prisma-exam-templates-repository';
 import { PrismaExamApplicationsRepository } from './prisma/repositories/prisma-exam-applications-repository';
 import { ExamApplicationsRepository } from 'src/domain/exams/application/repositories/exam-applications-repository';
-import { WrittenQuestionsRepository } from 'src/domain/exams/application/repositories/written-questions-repository';
-import { PrismaWrittenQuestionsRepository } from './prisma/repositories/prisma-written-questions-repository';
 
 @Module({
   providers: [
@@ -18,15 +16,7 @@ import { PrismaWrittenQuestionsRepository } from './prisma/repositories/prisma-w
       provide: ExamApplicationsRepository,
       useClass: PrismaExamApplicationsRepository,
     },
-    {
-      provide: WrittenQuestionsRepository,
-      useClass: PrismaWrittenQuestionsRepository,
-    },
   ],
-  exports: [
-    ExamTemplatesRepository,
-    ExamApplicationsRepository,
-    WrittenQuestionsRepository,
-  ],
+  exports: [ExamTemplatesRepository, ExamApplicationsRepository],
 })
 export class DatabaseModule {}

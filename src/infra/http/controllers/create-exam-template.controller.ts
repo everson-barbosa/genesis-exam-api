@@ -8,14 +8,14 @@ export class CreateExamTemplateController {
 
   @Post()
   async create(@Body() body: CreateExamTemplateDTO) {
-    const { title, description, questionsIds } = body;
+    const { title, description, questions } = body;
     const authorId = '1';
 
     const response = await this.createExamTemplate.execute({
       authorId,
       title,
       description,
-      questionsIds,
+      questions,
     });
 
     if (response.isLeft()) {

@@ -1,15 +1,37 @@
-import { Entity } from '../../../../core/entities/entity';
+import { Entity } from 'src/core/entities/entity';
+import { UniqueEntityID } from 'src/core/entities/unique-entity-id';
+import { QuestionOptionList } from './question-option-list';
+import { Optional } from 'src/core/types/Optional';
 
-const QuestionKind = {
+const QUESTION_KIND = {
   WRITTEN: 1,
-  MULTIPLE_CHOICES: 2,
+  MULTIPLE_CHOICE: 2,
 } as const;
 
-type QuestionKindType = keyof typeof QuestionKind;
+type QuestionKindType = keyof typeof QUESTION_KIND;
 
-export interface QuestionProps {
+interface QuestionProps {
   enunciation: string;
+  options: QuestionOptionList;
   kind: QuestionKindType;
 }
 
-export abstract class Question<Props> extends Entity<QuestionProps & Props> {}
+type CreateQuestionProps = Optional<QuestionProps, 'options'>;
+
+export class Question extends Entity<QuestionProps> {
+  set options(options: QuestionOptionList) {
+    this.options = options;
+  }
+
+  static create(props: CreateQuestionProps, id?: UniqueEntityID) {
+    const question = new Question(
+      {
+        ...props,
+        options: props.options ?? new QuestionOptionList([]),
+      },
+      id ?? new UniqueEntityID(),
+    );
+
+    return question;
+  }
+}

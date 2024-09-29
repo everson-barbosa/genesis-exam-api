@@ -10,7 +10,11 @@ interface CreateExamTemplateUseCaseRequest {
   title: string;
   description: string;
   authorId: string;
-  questionsIds: string[];
+  questions: Array<{
+    id: string;
+    position: number;
+    scoreWeight: number;
+  }>;
 }
 
 type CreateExamTemplateUseCaseResponse = Either<
@@ -28,7 +32,7 @@ export class CreateExamTemplateUseCase {
     title,
     description,
     authorId,
-    questionsIds,
+    questions,
   }: CreateExamTemplateUseCaseRequest): Promise<CreateExamTemplateUseCaseResponse> {
     const examTemplate = ExamTemplate.create({
       title,
@@ -36,10 +40,12 @@ export class CreateExamTemplateUseCase {
       authorId: new UniqueEntityID(authorId),
     });
 
-    const examTemplateQuestions = questionsIds.map((questionId) => {
+    const examTemplateQuestions = questions.map((question) => {
       return ExamTemplateQuestion.create({
         examTemplateId: examTemplate.id,
-        questionId: new UniqueEntityID(questionId),
+        questionId: new UniqueEntityID(question.id),
+        position: question.position,
+        scoreWeight: question.scoreWeight,
       });
     });
 

@@ -4,10 +4,16 @@ import { ExamApplication } from '../../enterprise/entities/exam-application';
 import { ExamApplicationsRepository } from '../repositories/exam-applications-repository';
 import { ExamTemplatesRepository } from '../repositories/exam-templates-repository';
 import { UniqueEntityID } from 'src/core/entities/unique-entity-id';
+import { ExamApplicationQuestionList } from '../../enterprise/entities/exam-application-question-list';
+import { ExamApplicationQuestion } from '../../enterprise/entities/exam-application-question';
 
 interface CreateExamApplicationUseCaseRequest {
   examTemplateId: string;
-  questionsIds: string[];
+  questions: Array<{
+    id: string;
+    position: number;
+    scoreWeight: number;
+  }>;
   startDate: null | Date;
   endDate: null | Date;
 }
@@ -28,7 +34,7 @@ export class CreateExamApplicationUseCase {
 
   async execute({
     examTemplateId,
-    questionsIds,
+    questions,
     startDate,
     endDate,
   }: CreateExamApplicationUseCaseRequest): Promise<CreateExamApplicationUseCaseResponse> {
@@ -41,12 +47,22 @@ export class CreateExamApplicationUseCase {
 
     const examApplication = ExamApplication.create({
       examTemplateId: examTemplate.id,
-      questionsIds: questionsIds.map(
-        (questionId) => new UniqueEntityID(questionId),
-      ),
       startDate,
       endDate,
     });
+
+    const examApplicationQuestions = questions.map((question) => {
+      return ExamApplicationQuestion.create({
+        examApplicationId: examApplication.id,
+        questionId: new UniqueEntityID(question.id),
+        position: question.position,
+        scoreWeight: question.scoreWeight,
+      });
+    });
+
+    examApplication.questions = new ExamApplicationQuestionList(
+      examApplicationQuestions,
+    );
 
     await this.examApplicationsRepository.create(examApplication);
 

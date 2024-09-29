@@ -1,40 +1,44 @@
-import { Injectable } from '@nestjs/common';
 import { Either, right } from 'src/core/either';
-import { MultipleChoiceQuestionsRepository } from '../repositories/multiple-choice-questions-repository';
-import {
-  MultipleChoiceQuestion,
-  Option,
-} from '../../enterprise/entities/multiple-choice-question';
+import { QuestionsRepository } from '../repositories/questions-repository';
+import { Question } from '../../enterprise/entities/question';
+import { QuestionOptionList } from '../../enterprise/entities/question-option-list';
+import { QuestionOption } from '../../enterprise/entities/question-option';
+import { UniqueEntityID } from 'src/core/entities/unique-entity-id';
 
-interface CreateExamQuestionUseCaseRequest {
+interface CreateMultipleChoiceQuestionRequest {
   enunciation: string;
-  options: Option[];
+  options: Array<{ id: string }>;
 }
 
-type CreateExamQuestionUseCaseResponse = Either<
+type CreateMultipleChoiceQuestionResponse = Either<
   null,
   {
-    multipleChoiceQuestion: MultipleChoiceQuestion;
+    question: Question;
   }
 >;
 
-@Injectable()
-export class CreateExamQuestionUseCase {
-  constructor(
-    private multipleChoiceQuestionsRepository: MultipleChoiceQuestionsRepository,
-  ) {}
+export class CreateMultipleChoiceQuestion {
+  constructor(private questionsRepository: QuestionsRepository) {}
 
   async execute({
     enunciation,
     options,
-  }: CreateExamQuestionUseCaseRequest): Promise<CreateExamQuestionUseCaseResponse> {
-    const multipleChoiceQuestion = MultipleChoiceQuestion.create({
+  }: CreateMultipleChoiceQuestionRequest): Promise<CreateMultipleChoiceQuestionResponse> {
+    const question = Question.create({
       enunciation,
-      options,
+      kind: 'MULTIPLE_CHOICE',
     });
 
-    await this.multipleChoiceQuestionsRepository.create(multipleChoiceQuestion);
+    const questionOptions = options.map((option) => {
+      return QuestionOption.create({
+        optionId: new UniqueEntityID(option.id),
+      });
+    });
 
-    return right({ multipleChoiceQuestion });
+    question.options = new QuestionOptionList(questionOptions);
+
+    await this.questionsRepository.create(question);
+
+    return right({ question });
   }
 }
