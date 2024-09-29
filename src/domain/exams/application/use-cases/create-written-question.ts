@@ -2,23 +2,23 @@ import { Either, right } from 'src/core/either';
 import { QuestionsRepository } from '../repositories/questions-repository';
 import { Question } from '../../enterprise/entities/question';
 
-interface CreateWrittenQuestionRequest {
+interface CreateWrittenQuestionUseCaseRequest {
   enunciation: string;
 }
 
-type CreateWrittenQuestionResponse = Either<
+type CreateWrittenQuestionUseCaseResponse = Either<
   null,
   {
     question: Question;
   }
 >;
 
-export class CreateWrittenQuestion {
+export class CreateWrittenQuestionUseCase {
   constructor(private questionsRepository: QuestionsRepository) {}
 
   async execute(
-    props: CreateWrittenQuestionRequest,
-  ): Promise<CreateWrittenQuestionResponse> {
+    props: CreateWrittenQuestionUseCaseRequest,
+  ): Promise<CreateWrittenQuestionUseCaseResponse> {
     const question = Question.create({
       ...props,
       kind: 'WRITTEN',

@@ -1,29 +1,36 @@
-import { Either, right } from 'src/core/either';
+import { Either, left, right } from 'src/core/either';
 import { QuestionsRepository } from '../repositories/questions-repository';
 import { Question } from '../../enterprise/entities/question';
 import { QuestionOptionList } from '../../enterprise/entities/question-option-list';
 import { QuestionOption } from '../../enterprise/entities/question-option';
 import { UniqueEntityID } from 'src/core/entities/unique-entity-id';
+import { NotEnoughOptionsError } from './errors/not-enough-options-error';
 
-interface CreateMultipleChoiceQuestionRequest {
+interface CreateMultipleChoiceQuestionUseCaseRequest {
   enunciation: string;
   options: Array<{ id: string }>;
 }
 
-type CreateMultipleChoiceQuestionResponse = Either<
-  null,
+type CreateMultipleChoiceQuestionUseCaseResponse = Either<
+  NotEnoughOptionsError,
   {
     question: Question;
   }
 >;
 
-export class CreateMultipleChoiceQuestion {
+const MINIMUM_OPTION_LENGTH = 2;
+
+export class CreateMultipleChoiceQuestionUseCase {
   constructor(private questionsRepository: QuestionsRepository) {}
 
   async execute({
     enunciation,
     options,
-  }: CreateMultipleChoiceQuestionRequest): Promise<CreateMultipleChoiceQuestionResponse> {
+  }: CreateMultipleChoiceQuestionUseCaseRequest): Promise<CreateMultipleChoiceQuestionUseCaseResponse> {
+    if (options.length < MINIMUM_OPTION_LENGTH) {
+      return left(new NotEnoughOptionsError());
+    }
+
     const question = Question.create({
       enunciation,
       kind: 'MULTIPLE_CHOICE',

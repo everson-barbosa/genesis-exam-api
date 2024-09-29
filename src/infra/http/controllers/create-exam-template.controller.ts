@@ -1,6 +1,6 @@
 import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
 import { CreateExamTemplateUseCase } from 'src/domain/exams/application/use-cases/create-exam-template';
-import { CreateExamTemplateDTO } from '../dtos/create-exam-template-dto';
+import { CreateExamTemplateDTO } from '../dtos/create-exam-template.dto';
 
 @Controller('/exam-template')
 export class CreateExamTemplateController {
