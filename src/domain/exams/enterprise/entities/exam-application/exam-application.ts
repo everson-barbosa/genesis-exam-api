@@ -5,6 +5,7 @@ import { ExamApplicationQuestionList } from './exam-application-question-list';
 import { ExamApplicationParticipantList } from './exam-application-participant-list';
 
 interface ExamApplicationProps {
+  authorId: UniqueEntityID;
   examTemplateId: UniqueEntityID;
   questions: ExamApplicationQuestionList;
   participants: ExamApplicationParticipantList;
@@ -18,8 +19,20 @@ type CreateExamApplicationProps = Optional<
 >;
 
 export class ExamApplication extends AggregateRoot<ExamApplicationProps> {
+  get authorId() {
+    return this.props.authorId;
+  }
+
   get examTemplateId() {
     return this.props.examTemplateId;
+  }
+
+  get startDate() {
+    return this.props.startDate;
+  }
+
+  get endDate() {
+    return this.props.endDate;
   }
 
   set questions(questions: ExamApplicationQuestionList) {

@@ -8,16 +8,20 @@ import { CreateWrittenQuestionController } from './controllers/create-written-qu
 import { CreateMultipleChoiceQuestionController } from './controllers/create-multiple-choice-question.controller';
 import { FetchRecentExamTemplatesController } from './controllers/fetch-recent-exam-templates.controller';
 import { FetchRecentExamTemplatesUseCase } from 'src/domain/exams/application/use-cases/fetch-recent-exam-templates';
+import { CreateExamApplicationController } from './controllers/create-exam-application.controller';
+import { CreateExamApplicationUseCase } from 'src/domain/exams/application/use-cases/create-exam-application';
 
 @Module({
   imports: [DatabaseModule],
   controllers: [
+    CreateExamApplicationController,
     CreateExamTemplateController,
     CreateWrittenQuestionController,
     CreateMultipleChoiceQuestionController,
     FetchRecentExamTemplatesController,
   ],
   providers: [
+    CreateExamApplicationUseCase,
     CreateExamTemplateUseCase,
     CreateWrittenQuestionUseCase,
     CreateMultipleChoiceQuestionUseCase,

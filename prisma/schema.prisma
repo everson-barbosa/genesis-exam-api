@@ -63,7 +63,7 @@ model ExamApplication {
   examTemplateId String @map("exam_template_id")
 
   examTemplate            ExamTemplate              @relation(fields: [examTemplateId], references: [id])
-  ExamApplicationQuestion ExamApplicationQuestion[]
+  examApplicationQuestion ExamApplicationQuestion[]
 }
 
 model ExamTemplate {

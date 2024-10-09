@@ -11,6 +11,7 @@ import { ExamApplicationParticipantList } from '../../enterprise/entities/exam-a
 
 interface CreateExamApplicationUseCaseRequest {
   examTemplateId: string;
+  authorId: string;
   questions: Array<{
     id: string;
     position: number;
@@ -38,6 +39,7 @@ export class CreateExamApplicationUseCase {
   ) {}
 
   async execute({
+    authorId,
     examTemplateId,
     questions,
     participants,
@@ -48,10 +50,11 @@ export class CreateExamApplicationUseCase {
       await this.examTemplatesRepository.findById(examTemplateId);
 
     if (!examTemplate) {
-      return left(new Error('Exam Template not found'));
+      return left(new Error('Resource not found'));
     }
 
     const examApplication = ExamApplication.create({
+      authorId: new UniqueEntityID(authorId),
       examTemplateId: examTemplate.id,
       startDate,
       endDate,
